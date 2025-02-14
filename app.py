@@ -15,10 +15,11 @@ app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI  #Створює
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = SQLALCHEMY_TRACK_MODIFICATIONS #дозволяє відслудковувати зміни в базі даних
 db.init_app(app)
 
+from models import User
+
 @app.route("/")
 def index():
    
-
     return render_template("index.html")
 
 
