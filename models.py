@@ -1,4 +1,4 @@
-from app import db
+from db import db
 from datetime import datetime
 
 class User(db.Model):
@@ -10,32 +10,48 @@ class User(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)#timexone-Враховується часовий пояс,default=datetime.utcnow-передає поточний час
     bio = db.Column(db.Text,nullable=False)
     
+    user_comments = db.relationship("Comment", backref="comment_author",lazy=True)
+    user_topics = db.relationship("Topic",backref="topic_author",lazy=True)
+    user_posts = db.relationship("Post",backref = "post_author",lazy=True)
 
     def __repr__(self):#представлення обєкта в програмі
         return f'User {self.nickname}'
     
 
-class Topics(db.Model):
+class Topic(db.Model):
     id = db.Column(db.Integer,primary_key=True)
-    name = db.Column(db.Text,unique=True,nullable=True)
-    posts = db.Column(db.Text,nallable=True)
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
+    author_id = db.Column(db.Integer,db.ForeignKey("user.id"))#Задаємо зовнішній ключ
+    name = db.Column(db.String(200),unique=True)
 
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
+    rules = db.Column(db.String)
+    
+    posts = db.relationship("Post", backref="topic", lazy=True)#Робимо звязок один до багатьох
+     
 
 class Post(db.Model):
     id = db.Column(db.Integer,primary_key=True)
-    title = db.Column(db.String(200),nullable=True)
-    story = db.Column(db.Text,nullable=True)
-    user_nickname = db.Column(db.String(100),unique=True,nullable=True)
+    author_id = db.Column(db.Integer,db.ForeignKey("user.id"))#Задаємо зовнішній ключ
+
+    topic_id = db.Column(db.Integer,db.ForeignKey("topic.id"))#("topic.id")--посилання
+    title = db.Column(db.String(200),)
+    content = db.Column(db.Text)
     published_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
-    likes = db.Column(db.Integer,nullable=True)
-    rules = db.Column(db.String)
+
+
+    likes = db.relationship("Like",backref="liked_post",lazy=True)
+    comments=db.relationship("Comment", backref="post",lazy=True)
     
+
 class Comment(db.Model):
     id = db.Column(db.Integer,primary_key=True)
-    comment = db.Column(db.Text,nullabele=True)
-    likes = db.Column(db.Integer,nullable=True)
-    user_nickname = db.Column(db.String,nullable=True)
-    published_at = db.Column(db.DataTime(timezone=True), default=datetime.utcnow)
+    post_id = db.Column(db.Integer,db.ForeignKey("post.id"))
+    user_id = db.Column(db.Integer,db.ForeignKey("user.id"))
+    content = db.Column(db.Text)
+    published_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
 
-#таблиці на дз Subreddit,Post,Comment
+
+class Like(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    post_id = db.Column(db.Integer,db.ForeignKey("post.id"))
+    user_id = db.Column(db.Integer,db.ForeignKey("user.id"))
