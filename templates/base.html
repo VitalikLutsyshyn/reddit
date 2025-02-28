@@ -25,14 +25,16 @@
     <header >
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container">
-              <a class="navbar-brand" href="#">REDDIT</a>
+              <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static',filename='img/reddit-seeklogo.png')}}" height="30"  alt="">
+                REDDIT</a>
             
               
               <div class="collapse navbar-collapse "  id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <form class="d-flex" role="search" >
                   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-outline-success" type="submit">Search</button>
+                  <button class="btn btn-outline-secondary" type="submit"><i class="ti ti-search"></i></button>
                 </form>
               </div>
             </ul>
