@@ -41,10 +41,10 @@ def add_topic():
 
 @app.route("/add_post")
 def add_post():
-    post = Topic(title="I've been stuck in an elevator for over an hour",content="Today I got stuck in the elevator and was there for 2 hours. When I got stuck, I was supposed to go out with my friends, but instead I sat in the elevator all that time.")
+    post = Post(title="I've been stuck in an elevator for over an hour",content="Today I got stuck in the elevator and was there for 2 hours. When I got stuck, I was supposed to go out with my friends, but instead I sat in the elevator all that time.")
     db.session.add(post)#Додаємо користувача в сесію
     db.session.commit()#Збереження(додавання) у базу даних
-    return f"User {post.name} Додано!!!"
+    return f"User {post.title} Додано!!!"
 
     
 

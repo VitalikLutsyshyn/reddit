@@ -1,0 +1,11 @@
+.create-btn i{
+    font-size: 20px;
+}
+
+.profile-btn{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-image: url(static/img/man.png);
+    background-size: cover;
+}

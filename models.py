@@ -9,7 +9,7 @@ class User(db.Model):
     password = db.Column(db.String(50),nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)#timexone-Враховується часовий пояс,default=datetime.utcnow-передає поточний час
     bio = db.Column(db.Text,nullable=False)
-    
+    avatar = db.Column(db.Text,default="man.png")
     user_comments = db.relationship("Comment", backref="comment_author",lazy=True)
     user_topics = db.relationship("Topic",backref="topic_author",lazy=True)
     user_posts = db.relationship("Post",backref = "post_author",lazy=True)
@@ -22,23 +22,21 @@ class Topic(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     author_id = db.Column(db.Integer,db.ForeignKey("user.id"))#Задаємо зовнішній ключ
     name = db.Column(db.String(200),unique=True)
-
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
     rules = db.Column(db.String)
-    
+    image = db.Column(db.Text,default="photo-circle.png")
+    cover = db.Column(db.Text)
     posts = db.relationship("Post", backref="topic", lazy=True)#Робимо звязок один до багатьох
      
 
 class Post(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     author_id = db.Column(db.Integer,db.ForeignKey("user.id"))#Задаємо зовнішній ключ
-
+    image = db.Column(db.Text)
     topic_id = db.Column(db.Integer,db.ForeignKey("topic.id"))#("topic.id")--посилання
     title = db.Column(db.String(200),)
     content = db.Column(db.Text)
     published_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
-
-
     likes = db.relationship("Like",backref="liked_post",lazy=True)
     comments=db.relationship("Comment", backref="post",lazy=True)
     
