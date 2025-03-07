@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+    <h1>Реєстраці</h1>
+
+    <form action="container py-5" style="max-width:700px" method="post">
+    {{form.hidden_tag()}} <!-- Додавання CSRF токена від атак -->
+
+
+<!-- Поля  в формі(nickname,email,gender,password,check_password,bio,avatar)-->
+    <div class="mb-3 center">
+        {{ form.nickname.label}} <!-- Підпис для поля(той що стоїть першим в forms.py)  -->
+        {{form.nickname(class="form-control")}}<!--  Додавання поля-->
+    </div>
+
+    <div class="mb-3">
+        {{ form.email.label}} 
+        {{form.email(class="form-control")}}
+
+     <div class="mb-3">
+        {{ form.gender.label}} 
+        {{form.gender(class="form-control")}}
+    </div>
+
+    <div class="mb-3">
+        {{ form.password.label}}
+        {{form.password(class="form-control")}}
+    </div>
+
+    <div class="mb-3">
+        {{ form.check_password.label}} 
+        {{form.check_password(class="form-control")}}
+    </div>
+
+    <div class="mb-3">
+        {{ form.bio.label}} 
+        {{form.bio(class="form-control")}}
+    </div>
+
+    <div class="mb-3">
+        {{ form.avatar.label}} 
+        {{form.avatar(class="form-control")}}
+    </div>
+
+    </form>
+</main>
+
+
+{% endblock  %}

@@ -5,8 +5,17 @@ from config import *
 from flask_migrate import Migrate
 from db import db
 
+from forms import RegistrationForm
+
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+app.config["CSRF_ENABLED"]=True #Вмикає CSRF захист(Від атак)
+app.config["UPLOAD_FOLDER"] = "static/users_uploads"#Файли збережені користувачами
 
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI  #Створює адресу бази даних 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = SQLALCHEMY_TRACK_MODIFICATIONS #дозволяє відслудковувати зміни в базі даниХ
@@ -16,6 +25,11 @@ db.init_app(app)#повязує базу даних з додатком (app)
 migrate = Migrate(app,db)#додаємо міграції
 from models import User, Topic,Post
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))#Функція яка загружає поточного користувача
+
+
 
 @app.route("/")
 def index():
@@ -23,13 +37,15 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/add_user")
-def add_user():
-    user = User(nickname="Admination",email="administration@gmail.com",gender="male",password="123123123",bio="Heloooo")
-    db.session.add(user)#Додаємо користувача в сесію
-    db.session.commit()#Збереження(додавання) у базу даних
+@app.route("/registration")
+def user_registration():
+    form = RegistrationForm()#Створення форми
+
+
+    # db.session.add(user)#Додаємо користувача в сесію
+    # db.session.commit()#Збереження(додавання) у базу даних
   
-    return f"User {user.nickname} Додано!!!"
+    return render_template("registration.html",form=form)
 
 
 @app.route("/add_topic")
@@ -46,7 +62,7 @@ def add_post():
     db.session.commit()#Збереження(додавання) у базу даних
     return f"User {post.title} Додано!!!"
 
-    
+
 
 
 if __name__  == "__main__":

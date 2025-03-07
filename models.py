@@ -1,7 +1,9 @@
 from db import db
 from datetime import datetime
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash,check_password_hash
 
-class User(db.Model):
+class User(db.Model,UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(100),unique=True,nullable=False)#unique-Унікальне,nullable-має бути текст
     email = db.Column(db.String(150),unique=True,nullable=False)
@@ -13,6 +15,12 @@ class User(db.Model):
     user_comments = db.relationship("Comment", backref="comment_author",lazy=True)
     user_topics = db.relationship("Topic",backref="topic_author",lazy=True)
     user_posts = db.relationship("Post",backref = "post_author",lazy=True)
+
+    def hash_password(self,password):#Створення функції шифрування паролю
+        self.password = generate_password_hash(password)#Команда для шифрування пароль
+
+    def check_password(self,real_password):#Створення функції для перевірки зашифрованого паролю
+        return check_password_hash(self.password,real_password)
 
     def __repr__(self):#представлення обєкта в програмі
         return f'User {self.nickname}'
