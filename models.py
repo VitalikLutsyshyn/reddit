@@ -1,15 +1,15 @@
 from db import db
-from datetime import datetime
+from datetime import datetime,timezone
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
 
 class User(db.Model,UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)#autoincrement=True--Автозаповнення
     nickname = db.Column(db.String(100),unique=True,nullable=False)#unique-Унікальне,nullable-має бути текст
     email = db.Column(db.String(150),unique=True,nullable=False)
     gender = db.Column(db.String(20))
     password = db.Column(db.String(50),nullable=False)
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)#timexone-Враховується часовий пояс,default=datetime.utcnow-передає поточний час
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))#timexone-Враховується часовий пояс,default=datetime.utcnow-передає поточний час
     bio = db.Column(db.Text,nullable=False)
     avatar = db.Column(db.Text,default="man.png")
     user_comments = db.relationship("Comment", backref="comment_author",lazy=True)
@@ -27,10 +27,10 @@ class User(db.Model,UserMixin):
     
 
 class Topic(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     author_id = db.Column(db.Integer,db.ForeignKey("user.id"))#Задаємо зовнішній ключ
     name = db.Column(db.String(200),unique=True)
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))
     rules = db.Column(db.String)
     image = db.Column(db.Text,default="photo-circle.png")
     cover = db.Column(db.Text)
@@ -38,26 +38,26 @@ class Topic(db.Model):
      
 
 class Post(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     author_id = db.Column(db.Integer,db.ForeignKey("user.id"))#Задаємо зовнішній ключ
     image = db.Column(db.Text)
     topic_id = db.Column(db.Integer,db.ForeignKey("topic.id"))#("topic.id")--посилання
     title = db.Column(db.String(200),)
     content = db.Column(db.Text)
-    published_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
+    published_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))
     likes = db.relationship("Like",backref="liked_post",lazy=True)
     comments=db.relationship("Comment", backref="post",lazy=True)
     
 
 class Comment(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     post_id = db.Column(db.Integer,db.ForeignKey("post.id"))
     user_id = db.Column(db.Integer,db.ForeignKey("user.id"))
     content = db.Column(db.Text)
-    published_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
+    published_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))
 
 
 class Like(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     post_id = db.Column(db.Integer,db.ForeignKey("post.id"))
     user_id = db.Column(db.Integer,db.ForeignKey("user.id"))

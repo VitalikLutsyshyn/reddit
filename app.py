@@ -4,8 +4,9 @@ from sqlalchemy.orm import DeclarativeBase
 from config import *
 from flask_migrate import Migrate
 from db import db
-
+from werkzeug.utils import secure_filename
 from forms import RegistrationForm
+import os
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -37,14 +38,30 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/registration")
+@app.route("/registration",methods=["POST","GET"])
 def user_registration():
     form = RegistrationForm()#Створення форми
+    if form.validate_on_submit():#Якщо форма пройшла всі перевірки
+        if form.avatar.data:#Перевірка чи є аватар
+            avatar_file = form.avatar.data#отримуємо файл з аватаром
+            filename = secure_filename(avatar_file.filename)#Дістаєм файл щоб безпечно отримати назву
+            path = os.path.join(app.config["UPLOAD_FOLDER"],filename)#Прописуємо шлях для збереженя в папку user uploads
+            avatar_file.save(path)#Зберігання файлу
+        else:
+            avatar_file = "man.png"
 
 
-    # db.session.add(user)#Додаємо користувача в сесію
-    # db.session.commit()#Збереження(додавання) у базу даних
-  
+        user = User(nickname = form.nickname.data,
+                    email = form.email.data,
+                    gender = form.gender.data,
+                    password = form.password.data,
+                    bio = form.bio.data,
+                    avatar = filename)#Створення рядка в базі даних 
+
+        db.session.add(user)#Додаємо користувача в сесію
+        db.session.commit()#Збереження(додавання) у базу даних
+        login_user(user)
+        return redirect(url_for("index"))
     return render_template("registration.html",form=form)
 
 
