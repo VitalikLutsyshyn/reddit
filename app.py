@@ -31,7 +31,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))#Функція яка загружає поточного користувача
 
 
-
 @app.route("/")
 def index():
    
@@ -65,6 +64,12 @@ def user_registration():
     return render_template("registration.html",form=form)
 
 
+@app.route("/login")
+def login():
+
+    return render_template("login.html")
+
+
 @app.route("/add_topic")
 def add_topic():
     topic = Topic(name="Games")
@@ -72,14 +77,13 @@ def add_topic():
     db.session.commit()#Збереження(додавання) у базу даних
     return f"User {topic.name} Додано!!!"
 
+
 @app.route("/add_post")
 def add_post():
     post = Post(title="I've been stuck in an elevator for over an hour",content="Today I got stuck in the elevator and was there for 2 hours. When I got stuck, I was supposed to go out with my friends, but instead I sat in the elevator all that time.")
     db.session.add(post)#Додаємо користувача в сесію
     db.session.commit()#Збереження(додавання) у базу даних
     return f"User {post.title} Додано!!!"
-
-
 
 
 if __name__  == "__main__":

@@ -20,3 +20,11 @@ class RegistrationForm(FlaskForm):
     avatar = FileField("Завантежте аватар",validators=[FileAllowed(["jpg","png","jpeg","webp"],"Виберіть зображення")])  
 
     submit = SubmitField("Зареєструватися")
+
+
+class LoginForm(FlaskForm):
+    nickname = StringField("Ваш нік",validators=[DataRequired(),Length(min=4, max=20)])
+    email = StringField("Email який ви вказували при реєстрації",validators=[DataRequired(),Email(),Length(min=4,max=100)])
+    password = PasswordField("Введіть ваш пароль",alidators=[DataRequired(),Length(min=8)])
+
+    submit = SubmitField("Увійти")
