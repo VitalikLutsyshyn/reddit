@@ -23,8 +23,7 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    nickname = StringField("Ваш нік",validators=[DataRequired(),Length(min=4, max=20)])
     email = StringField("Email який ви вказували при реєстрації",validators=[DataRequired(),Email(),Length(min=4,max=100)])
-    password = PasswordField("Введіть ваш пароль",alidators=[DataRequired(),Length(min=8)])
+    password = PasswordField("Введіть ваш пароль",validators=[DataRequired(),Length(min=8)])
 
     submit = SubmitField("Увійти")

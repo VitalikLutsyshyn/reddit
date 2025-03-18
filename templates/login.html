@@ -2,13 +2,29 @@
 {% block content %}
 
 
-<main class="container"></main>
-    <h1>Логін</h1>
+<main class="container py-5">
+    {% include 'alerts.html' %}
+    <h1 class="text-center">Логін</h1>
+
+    <form class="container py-5" style="max-width:700px" method="post">
+    {{form.hidden_tag()}} <!-- Додавання CSRF токена від атак -->
+
 
 <div class="mb-3 center">
-    {{form.nickname.label}}
-    {{form.nickname(class="form-control")}}
+    {{form.email.label}}
+    {{form.email(class="form-control")}}
+</div>
+
+<div class="mb-3 center">
+    {{form.password.label}}
+    {{form.password(class="form-control")}}
 </div>
 
 
+<div class="mb-3">
+    {{form.submit(class="btn btn-primary")}}
+</div>
+
+</form>
+</main>
 {% endblock  %}

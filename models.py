@@ -8,7 +8,7 @@ class User(db.Model,UserMixin):
     nickname = db.Column(db.String(100),unique=True,nullable=False)#unique-Унікальне,nullable-має бути текст
     email = db.Column(db.String(150),unique=True,nullable=False)
     gender = db.Column(db.String(20))
-    password = db.Column(db.String(50),nullable=False)
+    password = db.Column(db.String(300),nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))#timexone-Враховується часовий пояс,default=datetime.utcnow-передає поточний час
     bio = db.Column(db.Text,nullable=False)
     avatar = db.Column(db.Text,default="man.png")

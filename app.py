@@ -5,7 +5,7 @@ from config import *
 from flask_migrate import Migrate
 from db import db
 from werkzeug.utils import secure_filename
-from forms import RegistrationForm
+from forms import RegistrationForm,LoginForm
 import os
 
 app = Flask(__name__)
@@ -47,7 +47,7 @@ def user_registration():
             path = os.path.join(app.config["UPLOAD_FOLDER"],filename)#Прописуємо шлях для збереженя в папку user uploads
             avatar_file.save(path)#Зберігання файлу
         else:
-            avatar_file = "man.png"
+            filename = "man.png"
 
 
         user = User(nickname = form.nickname.data,
@@ -56,7 +56,7 @@ def user_registration():
                     password = form.password.data,
                     bio = form.bio.data,
                     avatar = filename)#Створення рядка в базі даних 
-
+        user.hash_password(user.password)#Шифруємо пароль
         db.session.add(user)#Додаємо користувача в сесію
         db.session.commit()#Збереження(додавання) у базу даних
         login_user(user)
@@ -64,10 +64,24 @@ def user_registration():
     return render_template("registration.html",form=form)
 
 
-@app.route("/login")
+@app.route("/login",methods=["POST","GET"])
 def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email = form.email.data).first()#Перевірка чи є такий користувач за його email
+        if user:
+            if user.check_password(form.password.data):
+                login_user(user)
+                return redirect(url_for("index"))
+            
+            else:
+                flash("Ви ввели неправильний email або пароль","alert-warning")
 
-    return render_template("login.html")
+        else:
+            flash("Ви ввели неправильний email або пароль","alert-warning")
+
+
+    return render_template("login.html",form=form)
 
 
 @app.route("/add_topic")
