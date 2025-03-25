@@ -84,6 +84,15 @@ def login():
     return render_template("login.html",form=form)
 
 
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("Ви вийшли з профілю","alert-primary")
+    return redirect(url_for("login"))
+
+
+
 @app.route("/add_topic")
 def add_topic():
     topic = Topic(name="Games")
