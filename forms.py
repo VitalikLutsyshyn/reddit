@@ -27,3 +27,11 @@ class LoginForm(FlaskForm):
     password = PasswordField("Введіть ваш пароль",validators=[DataRequired(),Length(min=8)])
 
     submit = SubmitField("Увійти")
+
+
+class PostForm(FlaskForm):
+    title = StringField("Назва",validators=[DataRequired(),Length(min=2,max=200)])
+    content = TextAreaField("Що ви хочете розповісти")
+    image = FileField("Виберіть картинку",validators=[FileAllowed(["jpg","png","jpeg","webp"],"Виберіть зображення")])
+
+    submit = SubmitField("Опублікувати")

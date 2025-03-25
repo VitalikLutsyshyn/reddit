@@ -5,7 +5,7 @@ from config import *
 from flask_migrate import Migrate
 from db import db
 from werkzeug.utils import secure_filename
-from forms import RegistrationForm,LoginForm
+from forms import RegistrationForm,LoginForm,PostForm
 import os
 
 app = Flask(__name__)
@@ -56,12 +56,20 @@ def user_registration():
                     password = form.password.data,
                     bio = form.bio.data,
                     avatar = filename)#Створення рядка в базі даних 
+
         user.hash_password(user.password)#Шифруємо пароль
         db.session.add(user)#Додаємо користувача в сесію
+        db.session.flush()
+
+        user_topic = Topic(author_id = user.id,name = user.nickname)
+        db.session.add(user_topic)
+
+
         db.session.commit()#Збереження(додавання) у базу даних
         login_user(user)
         return redirect(url_for("index"))
     return render_template("registration.html",form=form)
+
 
 
 @app.route("/login",methods=["POST","GET"])
@@ -101,12 +109,30 @@ def add_topic():
     return f"User {topic.name} Додано!!!"
 
 
-@app.route("/add_post")
+@app.route("/add_post",methods=["POST","GET"])
+@login_required
 def add_post():
-    post = Post(title="I've been stuck in an elevator for over an hour",content="Today I got stuck in the elevator and was there for 2 hours. When I got stuck, I was supposed to go out with my friends, but instead I sat in the elevator all that time.")
-    db.session.add(post)#Додаємо користувача в сесію
-    db.session.commit()#Збереження(додавання) у базу даних
-    return f"User {post.title} Додано!!!"
+    form = PostForm()
+    if form.validate_on_submit():#Якщо форма пройшла всі перевірки
+        if form.image.data:#Перевірка чи є аватар
+            image = form.image.data#отримуємо файл з аватаром
+            filename = secure_filename(image.filename)#Дістаєм файл щоб безпечно отримати назву
+            path = os.path.join(app.config["UPLOAD_FOLDER"],filename)#Прописуємо шлях для збереженя в папку user uploads
+            image.save(path)#Зберігання файлу
+        else:
+            filename = ""
+
+
+        post = Post(title =form.title.data,
+                    content = form.content.data,
+                    image = filename,
+                    author_id = current_user.id,
+                    topic_id = current_user.user_topics[0].id
+                    )
+
+        db.session.add(post)#Додаємо користувача в сесію
+        db.session.commit()#Збереження(додавання) у базу даних
+    return render_template("add_post.html",form=form)
 
 
 if __name__  == "__main__":

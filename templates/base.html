@@ -36,18 +36,26 @@
                   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                   <button class="btn btn-outline-secondary" type="submit"><i class="ti ti-search"></i></button>
 
-
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index')}}">Вийти</a>
-                </li>
-
                 </form>
+
               </div>
             </ul>
-            <button class="btn create-btn"><i class="ti ti-plus"></i>Створити</button>
+
+            {% if current_user.is_authenticated %}
+
+
+              <a class="nav-link" href="{{ url_for('logout')}}">Вийти</a>
+
+              <a class="btn create-btn" href="{{ url_for('add_post')}}"><i class="ti ti-plus"></i>Створити</a>
               <button class="btn profile-btn"></button>
               <button  class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
+
+            {% else %}
+              <a class="btn" href="{{ url_for('login')}}">Увійти</a>
+              <a class="btn" href="{{ url_for('user_registration')}}">Реєстрація</a>
+            {% endif %}
+            
 
 
               </button>
