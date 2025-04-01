@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+    
+<main class="container py-5">
+    {% include 'alerts.html' %}
+    <h1 class="text-center">Створити Топік</h1>
+
+    <form class="container py-5" enctype="multipart/form-data" style="max-width:700px" method="post">
+        {{form.hidden_tag()}} <!-- Додавання CSRF токена від атак -->
+        
+
+        <div class="mb-3 center">
+            {{form.title.label}}
+            {{form.title(class="form-control")}}
+        </div>
+    
+        <div class="mb-3 center">
+            {{form.content.label}}
+            {{form.content(class="form-control")}}
+        </div>
+    
+        <div class="mb-3 center">
+            {{form.image.label}}
+            {{form.image(class="form-control")}}
+        </div>
+
+        <div class="mb-3 center">
+            {{form.rules.label}}
+            {{form.rules(class="form-control")}}
+        </div>
+    
+        <div class="mb-3">
+            {{form.submit(class="btn btn-primary")}}
+        </div>
+
+{% endblock  %}

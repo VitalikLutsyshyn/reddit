@@ -5,7 +5,7 @@ from config import *
 from flask_migrate import Migrate
 from db import db
 from werkzeug.utils import secure_filename
-from forms import RegistrationForm,LoginForm,PostForm
+from forms import RegistrationForm,LoginForm,PostForm,TopicForm
 import os
 
 app = Flask(__name__)
@@ -101,12 +101,8 @@ def logout():
 
 
 
-@app.route("/add_topic")
-def add_topic():
-    topic = Topic(name="Games")
-    db.session.add(topic)#Додаємо користувача в сесію
-    db.session.commit()#Збереження(додавання) у базу даних
-    return f"User {topic.name} Додано!!!"
+
+
 
 
 @app.route("/add_post",methods=["POST","GET"])
@@ -133,6 +129,37 @@ def add_post():
         db.session.add(post)#Додаємо користувача в сесію
         db.session.commit()#Збереження(додавання) у базу даних
     return render_template("add_post.html",form=form)
+
+
+
+@app.route("/add_topic",methods=["POST","GET"])
+@login_required
+def add_topic():
+    form = TopicForm()
+    if form.validate_on_submit():#Якщо форма пройшла всі перевірки
+        
+        if form.image.data:#Перевірка чи є аватар
+            image = form.image.data#отримуємо файл з аватаром
+            filename = secure_filename(image.filename)#Дістаєм файл щоб безпечно отримати назву
+            path = os.path.join(app.config["UPLOAD_FOLDER"],filename)#Прописуємо шлях для збереженя в папку user uploads
+            image.save(path)#Зберігання файлу
+        else:
+            filename = ""
+
+        topic = Topic(title = form.title.data,
+                        content = form.content.data,
+                        image = filename,
+                        rules = form.rules.data,
+                        author_id = current_user.id,
+                        topic_id = current_user.user_topics[0].id
+                        )
+
+    # db.session.add(topic)#Додаємо користувача в сесію
+    db.session.commit()#Збереження(додавання) у базу даних
+
+    return render_template("add_topic.html",form=form)
+
+
 
 
 if __name__  == "__main__":
