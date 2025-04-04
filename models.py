@@ -33,7 +33,7 @@ class Topic(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))
     rules = db.Column(db.String)
     image = db.Column(db.Text,default="photo-circle.png")
-    cover = db.Column(db.Text)
+    cover = db.Column(db.Text)#Обкладинка
     posts = db.relationship("Post", backref="topic", lazy=True)#Робимо звязок один до багатьох
      
 

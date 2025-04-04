@@ -38,9 +38,9 @@ class PostForm(FlaskForm):
 
 
 class TopicForm(FlaskForm):
-    title = StringField("Назва топіка",validators=[DataRequired(),Length(min=2,max=200)])
-    content = TextAreaField("Про топік")
-    image = FileField("Виберіть картинку",validators=[FileAllowed(["jpg","png","jpeg","webp"],"Виберіть зображення")])
+    name = StringField("Назва топіка",validators=[DataRequired(),Length(min=2,max=200)])
     rules = TextAreaField("Правила для топіка")
+    image = FileField("Виберіть картинку",validators=[FileAllowed(["jpg","png","jpeg","webp"],"Виберіть зображення")])
+    cover = FileField("Додайте обкладинку",validators=[FileAllowed(["jpg","png","jpeg","webp"],"Виберіть зображення")])
 
     submit = SubmitField("Опублікувати")

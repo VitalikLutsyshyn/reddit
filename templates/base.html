@@ -42,12 +42,26 @@
             </ul>
 
             {% if current_user.is_authenticated %}
-
-
-              <a class="nav-link" href="{{ url_for('logout')}}">Вийти</a>
-
+            
               <a class="btn create-btn" href="{{ url_for('add_post')}}"><i class="ti ti-plus"></i>Створити</a>
-              <button class="btn profile-btn"></button>
+
+              <div class="btn-group dropstart">
+                <button class="btn profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu">
+                
+                  <li><a class="dropdown-item d-flex" href="#">
+                  <div class="profile-btn me-2"></div>
+                    {{current_user.nickname}}
+                  </a></li>
+
+                  <li><a class="dropdown-item" href="{{url_for('add_post')}}">Створити пост</a></li>
+                  <li><a class="dropdown-item" href="{{url_for('add_topic')}}">Створити топік </a></li>
+                   <li><hr class="dropdown-divider"></li> <!--Лінія між рядками -->
+                  <li><a class="dropdown-item" href="{{url_for('logout')}}">Вийти</a></li>
+                </ul>
+              </div>
+              
               <button  class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
 

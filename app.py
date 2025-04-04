@@ -41,33 +41,44 @@ def index():
 def user_registration():
     form = RegistrationForm()#Створення форми
     if form.validate_on_submit():#Якщо форма пройшла всі перевірки
-        if form.avatar.data:#Перевірка чи є аватар
-            avatar_file = form.avatar.data#отримуємо файл з аватаром
-            filename = secure_filename(avatar_file.filename)#Дістаєм файл щоб безпечно отримати назву
-            path = os.path.join(app.config["UPLOAD_FOLDER"],filename)#Прописуємо шлях для збереженя в папку user uploads
-            avatar_file.save(path)#Зберігання файлу
+           
+        is_user = User.query.filter_by(nickname = form.nickname.data).first()
+        is_email = User.query.filter_by(email = form.email.data).first()
+
+        if is_user:
+            flash("Введіть інше нік.Такий нік вже існує","alert-warning")
+        elif is_email:
+            flash("Введіть інший email.Такий email вже існує","alert-warning")
+        elif form.password.data != form.check_password.data:
+            flash("Паролі мають бути одинакoві","alert-warning")
         else:
-            filename = "man.png"
+            if form.avatar.data:#Перевірка чи є аватар
+                avatar_file = form.avatar.data#отримуємо файл з аватаром
+                filename = secure_filename(avatar_file.filename)#Дістаєм файл щоб безпечно отримати назву
+                path = os.path.join(app.config["UPLOAD_FOLDER"],filename)#Прописуємо шлях для збереженя в папку user uploads
+                avatar_file.save(path)#Зберігання файлу
+            else:
+                filename = "man.png"
 
 
-        user = User(nickname = form.nickname.data,
-                    email = form.email.data,
-                    gender = form.gender.data,
-                    password = form.password.data,
-                    bio = form.bio.data,
-                    avatar = filename)#Створення рядка в базі даних 
+            user = User(nickname = form.nickname.data,
+                        email = form.email.data,
+                        gender = form.gender.data,
+                        password = form.password.data,
+                        bio = form.bio.data,
+                        avatar = filename)#Створення рядка в базі даних 
 
-        user.hash_password(user.password)#Шифруємо пароль
-        db.session.add(user)#Додаємо користувача в сесію
-        db.session.flush()
+            user.hash_password(user.password)#Шифруємо пароль
+            db.session.add(user)#Додаємо користувача в сесію
+            db.session.flush()
 
-        user_topic = Topic(author_id = user.id,name = user.nickname)
-        db.session.add(user_topic)
+            user_topic = Topic(author_id = user.id,name = user.nickname)
+            db.session.add(user_topic)
 
 
-        db.session.commit()#Збереження(додавання) у базу даних
-        login_user(user)
-        return redirect(url_for("index"))
+            db.session.commit()#Збереження(додавання) у базу даних
+            login_user(user)
+            return redirect(url_for("index"))
     return render_template("registration.html",form=form)
 
 
@@ -137,7 +148,12 @@ def add_post():
 def add_topic():
     form = TopicForm()
     if form.validate_on_submit():#Якщо форма пройшла всі перевірки
-        
+
+        is_topic = Topic.query.filter_by(name = form.name.data).first()#Запит до бази даних.Перевірка чи є такий топік в базі даниї
+        if is_topic:
+            flash("Такий топік вже існує","alert-warning")
+            return redirect(url_for(("add_topic")))
+
         if form.image.data:#Перевірка чи є аватар
             image = form.image.data#отримуємо файл з аватаром
             filename = secure_filename(image.filename)#Дістаєм файл щоб безпечно отримати назву
@@ -146,16 +162,24 @@ def add_topic():
         else:
             filename = ""
 
-        topic = Topic(title = form.title.data,
-                        content = form.content.data,
+        if form.image.data:#Перевірка чи є аватар
+            cover = form.cover.data#отримуємо файл з аватаром
+            cover_filename = secure_filename(cover.filename)#Дістаєм файл щоб безпечно отримати назву
+            path = os.path.join(app.config["UPLOAD_FOLDER"],cover_filename)#Прописуємо шлях для збереженя в папку user uploads
+            cover.save(path)#Зберігання файлу
+        else:
+            cover_filename = ""        
+
+        topic = Topic(name = form.name.data,
                         image = filename,
+                        cover = cover_filename,
                         rules = form.rules.data,
-                        author_id = current_user.id,
-                        topic_id = current_user.user_topics[0].id
+                        author_id = current_user.id
                         )
 
-    # db.session.add(topic)#Додаємо користувача в сесію
-    db.session.commit()#Збереження(додавання) у базу даних
+
+        db.session.add(topic)#Додаємо користувача в сесію
+        db.session.commit()#Збереження(додавання) у базу даних
 
     return render_template("add_topic.html",form=form)
 
