@@ -2,13 +2,13 @@
 {% block content %}
     
 <main class="container py-5">
-    {% include 'alerts.html' %}
+{% include 'alerts.html' %}     <!-- підключення спливаючих повідомлень -->
     <h1 class="text-center">Створити Топік</h1>
 
     <form class="container py-5" enctype="multipart/form-data" style="max-width:700px" method="post">
         {{form.hidden_tag()}} <!-- Додавання CSRF токена від атак -->
         
-
+<!-- Створення полів для введення інформації -->
         <div class="mb-3 center">
             {{form.name.label}}
             {{form.name(class="form-control")}}

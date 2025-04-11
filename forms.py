@@ -9,7 +9,7 @@ GENDER_CHOICES = [
     ("female","Жінка"),
     ("other","Інше")
 ]#Список вибору в gender
-
+#Створення форми для регістрації
 class RegistrationForm(FlaskForm):
     nickname = StringField("Нікнейм", validators=[DataRequired(),Length(min=4, max=20)])#Створення форми.Validators-це перевірка на правильність,DataRequired()--Перевірка чи заповнене поле   
     email = StringField("Ваш Email",validators=[DataRequired(),Email(),Length(min=4,max=100)])
@@ -21,14 +21,14 @@ class RegistrationForm(FlaskForm):
 
     submit = SubmitField("Зареєструватися")
 
-
+#Створення форми для логіну
 class LoginForm(FlaskForm):
     email = StringField("Email який ви вказували при реєстрації",validators=[DataRequired(),Email(),Length(min=4,max=100)])
     password = PasswordField("Введіть ваш пароль",validators=[DataRequired(),Length(min=8)])
 
     submit = SubmitField("Увійти")
 
-
+#Створення форми для постів
 class PostForm(FlaskForm):
     title = StringField("Назва",validators=[DataRequired(),Length(min=2,max=200)])
     content = TextAreaField("Що ви хочете розповісти")
@@ -36,7 +36,7 @@ class PostForm(FlaskForm):
 
     submit = SubmitField("Опублікувати")
 
-
+#Створення форми для Топіка
 class TopicForm(FlaskForm):
     name = StringField("Назва топіка",validators=[DataRequired(),Length(min=2,max=200)])
     rules = TextAreaField("Правила для топіка")
