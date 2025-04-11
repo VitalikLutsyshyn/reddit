@@ -160,5 +160,14 @@ def add_topic():  # Додавання нової теми
         db.session.commit()
     return render_template("add_topic.html", form=form)
 
+
+@app.route("/<topic_name>/")#Буде підписуватися назва топіка в url адресі
+def topic_page(topic_name):
+    topic = Topic.query.filter_by(name=topic_name).first()
+
+    return render_template("topic_page.html",topic=topic) 
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)  # Запуск додатку в режимі розробки

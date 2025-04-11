@@ -37,6 +37,15 @@ class Topic(db.Model):
     posts = db.relationship("Post", backref="topic", lazy=True)#Робимо звязок один до багатьох
      
 
+class TopicMember(db.Model):
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)#id підписки
+    id_user = db.Column(db.Integer, db.ForeignKey("user.id"),nullable=False)#Задаємо зовнішній ключ
+    id_topic = db.Column(db.Integer,db.ForeignKey("topic.id"),nullable = False)#Задаємо зовнішній ключ
+    joined_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))#timexone-Враховується часовий пояс,default=datetime.utcnow-передає поточний час
+
+    user = db.relationship("User",backref = "subscriptions")
+    topic = db.relationship("Topic", backref = "members")# Учасники обговорення
+
 class Post(db.Model):
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     author_id = db.Column(db.Integer,db.ForeignKey("user.id"))#Задаємо зовнішній ключ
