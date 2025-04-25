@@ -153,7 +153,7 @@ def add_topic():  # Додавання нової теми
             name=form.name.data,
             image=filename,
             cover=cover_filename,
-            rules=form.rules.data,
+            rules=form.rules.data,  
             author_id=current_user.id
         )
         db.session.add(topic)

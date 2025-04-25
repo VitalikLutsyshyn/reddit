@@ -54,11 +54,11 @@
               <a class="btn create-btn" href="{{ url_for('add_post')}}"><i class="ti ti-plus"></i>Створити</a> <!-- Кнопка створення посту -->
 
               <div class="btn-group dropstart"> <!-- Дропдаун меню профілю -->
-                <button class="btn profile-btn dropdown-toggle" style="background-image: url({{ url_for('static',filename='users_uploads/'+current_user.avatar)}});" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn profile-btn dropdown-toggle" style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 </button>
                 <ul class="dropdown-menu"> <!-- Випадаюче меню -->
                   <li><a class="dropdown-item d-flex" href="#"> <!-- Профіль -->
-                  <div class="profile-btn me-2" style="background-image: url({{ url_for('static',filename='users_uploads/'+current_user.avatar)}});">
+                  <div class="profile-btn me-2" style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});">
 
                   </div>
                     {{current_user.nickname}} <!-- Відображення ніку -->
