@@ -99,10 +99,13 @@ def logout():
     flash("Ви вийшли з профілю", "alert-primary")
     return redirect(url_for("login"))  # Повернення на сторінку входу
 
-@app.route("/add_post", methods=["POST", "GET"])
+@app.route("/<topic_name>/add_post", methods=["POST", "GET"])
 @login_required
-def add_post():  # Додавання посту
+
+def add_post(topic_name):  # Додавання посту
     form = PostForm()
+    topic = Topic.query.filter_by(name = topic_name).first()
+
     if form.validate_on_submit():
         if form.image.data:  # Якщо завантажено зображення
             image = form.image.data
@@ -117,11 +120,12 @@ def add_post():  # Додавання посту
             content=form.content.data,
             image=filename,
             author_id=current_user.id,
-            topic_id=current_user.user_topics[0].id  # Прив'язка до теми користувача
-        )
+            topic_id= topic.id)
+        
         db.session.add(post)
         db.session.commit()
     return render_template("add_post.html", form=form)
+
 
 @app.route("/add_topic", methods=["POST", "GET"])
 @login_required

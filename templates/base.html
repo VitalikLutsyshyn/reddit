@@ -51,7 +51,7 @@
 
             {% if current_user.is_authenticated %} <!-- Перевірка: чи користувач авторизований -->
 
-              <a class="btn create-btn" href="{{ url_for('add_post')}}"><i class="ti ti-plus"></i>Створити</a> <!-- Кнопка створення посту -->
+              <a class="btn create-btn" href="{{ url_for('add_post',topic_name = current_user.user_topics[0].name)}}"><i class="ti ti-plus"></i>Створити</a> <!-- Кнопка створення посту -->
 
               <div class="btn-group dropstart"> <!-- Дропдаун меню профілю -->
                 <button class="btn profile-btn dropdown-toggle" style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,7 +63,7 @@
                   </div>
                     {{current_user.nickname}} <!-- Відображення ніку -->
                   </a></li>
-                  <li><a class="dropdown-item" href="{{url_for('add_post')}}">Створити пост</a></li> <!-- Створити пост -->
+                  <li><a class="dropdown-item" href="{{url_for('add_post',topic_name = current_user.user_topics[0].name)}}">Створити пост</a></li> <!-- Створити пост --> 
                   <li><a class="dropdown-item" href="{{url_for('add_topic')}}">Створити топік </a></li> <!-- Створити топік -->
                   <li><hr class="dropdown-divider"></li> <!--Лінія між рядками -->
                   <li><a class="dropdown-item" href="{{url_for('logout')}}">Вийти</a></li> <!-- Вийти -->
