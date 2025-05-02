@@ -30,7 +30,7 @@
             <div class="card-body">
                 <div>
 
-                    <a class=" d-flex mb-3 align-items-center author-link" href="{{url_for('topic_page',topic_name=post.post_name.nickname)}}"> <!-- Профіль -->
+                    <a class=" d-flex mb-3 align-items-center author-link" href="{{url_for('topic_page',topic_name=post.post_author.nickname)}}"> <!-- Профіль -->
                         <div class="profile-btn me-2" style="background-image: url({{url_for('static',filename='users_uploads/'+post.post_author.avatar)}});">
                         </div>
                           {{post.post_author.nickname}} <!-- Відображення ніку -->

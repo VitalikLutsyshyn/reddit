@@ -171,6 +171,8 @@ def topic_page(topic_name):
 
     return render_template("topic_page.html",topic=topic) 
 
+#зрообити сторінку поста
+@app.route("<topic_name>/<post_id>")
 
 
 if __name__ == "__main__":
