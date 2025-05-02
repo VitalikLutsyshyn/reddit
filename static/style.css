@@ -20,5 +20,12 @@
 }
 
 .post-img{
-    max-height: 100px;
+    max-width: 500px;
+    max-height: 800px; 
+    object-fit: contain; /*оптимізація фотографії */
+}
+
+.author-link{
+    text-decoration: none;
+    color: brown;
 }

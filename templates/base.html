@@ -82,9 +82,21 @@
           </nav>
     </header>
 
-    <main>
-        {% block content  %} <!-- Місце для динамічного контенту -->
-        {% endblock  %}
+    <main class="container">
+      <div class="row">
+        <div class="col-0 col-lg-2"></div>
+
+        <div class="col-12 col-lg-8">
+          {% block content  %} <!-- Місце для динамічного контенту -->
+          {% endblock  %}
+        </div>
+
+        <div class="col-0 col-lg-2"></div>
+      </div>
+
+
+
+
     </main>
 
 <!-- 
