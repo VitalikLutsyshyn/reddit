@@ -44,3 +44,8 @@ class TopicForm(FlaskForm):
     cover = FileField("Додайте обкладинку",validators=[FileAllowed(["jpg","png","jpeg","webp"],"Виберіть зображення")])
 
     submit = SubmitField("Опублікувати")
+
+class CommentForm(FlaskForm):
+    content = TextAreaField("Поділися своїми думками")
+
+    submit = SubmitField("Поділитися")

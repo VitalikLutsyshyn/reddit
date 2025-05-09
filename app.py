@@ -6,7 +6,7 @@ from config import *  # Імпорт налаштувань (наприклад,
 from flask_migrate import Migrate  # Для керування міграціями бази даних
 from db import db  # Імпорт об’єкта бази даних
 from werkzeug.utils import secure_filename  # Для безпечного збереження імен файлів
-from forms import RegistrationForm, LoginForm, PostForm, TopicForm  # Імпорт форм (реєстрації, входу, посту, топіка)
+from forms import RegistrationForm, LoginForm, PostForm, TopicForm, CommentForm  # Імпорт форм (реєстрації, входу, посту, топіка)
 import os  # Робота з файловою системою
 
 app = Flask(__name__)  # Створення екземпляру Flask-додатку
@@ -25,7 +25,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = SQLALCHEMY_TRACK_MODIFICATIONS  #
 db.init_app(app)  # Ініціалізує базу даних із додатком
 
 migrate = Migrate(app, db)  # Ініціалізує Flask-Migrate для керування міграціями
-from models import User, Topic, Post  # Імпорт моделей користувача, тем і постів
+from models import User, Topic, Post, Comment  # Імпорт моделей користувача, тем і постів
 
 @login_manager.user_loader
 def load_user(user_id):  # Функція завантаження користувача за ID (використовується Flask-Login)
@@ -172,7 +172,20 @@ def topic_page(topic_name):
     return render_template("topic_page.html",topic=topic) 
 
 #зрообити сторінку поста
-@app.route("<topic_name>/<post_id>")
+@app.route("/<topic_name>/<int:post_id>", methods = ["POST","GET"])
+def post_page(topic_name,post_id):
+    post = Post.query.get(post.id)
+    form =  CommentForm()
+
+    if form.validate_on_submit():
+        comment = Comment(post_id=post_id,
+                          user_id=current_user.id,
+                          content=form.content.data
+                          )
+        db.session.add(comment)
+        db.session.commit()
+
+    return render_template("post_page.html",post=post,form=form)
 
 
 if __name__ == "__main__":

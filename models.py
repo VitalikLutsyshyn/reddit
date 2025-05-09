@@ -63,6 +63,7 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer,db.ForeignKey("post.id"))
     user_id = db.Column(db.Integer,db.ForeignKey("user.id"))
     content = db.Column(db.Text)
+    # author = db.relationship("User",backref="user_comments",lazy=True)
     published_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))
 
 

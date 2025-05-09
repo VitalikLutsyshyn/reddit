@@ -29,3 +29,12 @@
     text-decoration: none;
     color: brown;
 }
+
+.topic-btn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.subscribe-btn,.add-post-btn{
+}
