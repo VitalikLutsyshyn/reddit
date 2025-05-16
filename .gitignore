@@ -1,2 +1,4 @@
+.venv/
 instance/reddit.db
-instance/users_uploads
+static/users_uploads
+__pycache__/
