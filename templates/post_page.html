@@ -5,53 +5,84 @@
     {% include 'alerts.html' %} <!-- підключення спливаючих повідомлень -->
 
 
-        <div class="card my-4">
-            <div class="card-body">
-                <div>
-
-                    <a class=" d-flex mb-3 align-items-center author-link" href="{{url_for('topic_page',topic_name=post.post_author.nickname)}}"> <!-- Профіль -->
-                        <div class="profile-btn me-2" style="background-image: url({{url_for('static',filename='users_uploads/'+post.post_author.avatar)}});">
-                        </div>
-                          {{post.post_author.nickname}} <!-- Відображення ніку -->
-                        </a>
-
-                    <h5 class="card-title">{{post.title}}</h5>
-                    <p class="card-text"><small class="text-body-secondary">{{post.published_at}}</small></p>
-                </div>
-
-             <p class="card-text">{{post.content}}</p> <!-- | фільтр truncate обрізає текст -->
-            </div>
-
-            {% if post.image %}   
-                <img class="post-img" src="{{ url_for('static',filename='users_uploads/'+post.image)}}" alt="...">
-            {% endif %} 
-
+    <div class="card my-4">
+        <div class="card-body">
             <div>
-                <button class="btn"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.8227 4.77124L12 4.94862L12.1773 4.77135C14.4244 2.52427 18.0676 2.52427 20.3147 4.77134C22.5618 7.01842 22.5618 10.6616 20.3147 12.9087L13.591 19.6324C12.7123 20.5111 11.2877 20.5111 10.409 19.6324L3.6853 12.9086C1.43823 10.6615 1.43823 7.01831 3.6853 4.77124C5.93237 2.52417 9.5756 2.52417 11.8227 4.77124ZM10.762 5.8319C9.10073 4.17062 6.40725 4.17062 4.74596 5.8319C3.08468 7.49319 3.08468 10.1867 4.74596 11.848L11.4697 18.5718C11.7625 18.8647 12.2374 18.8647 12.5303 18.5718L19.254 11.8481C20.9153 10.1868 20.9153 7.49329 19.254 5.83201C17.5927 4.17072 14.8993 4.17072 13.238 5.83201L12.5304 6.53961C12.3897 6.68026 12.199 6.75928 12 6.75928C11.8011 6.75928 11.6104 6.68026 11.4697 6.53961L10.762 5.8319Z" fill="#ffffff"/></svg></button>
-                <a class="btn" href=""><svg width="32" height="32" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.2755 2.28563C14.5558 2.16954 14.8783 2.23371 15.0928 2.44821L22.0929 9.44821C22.2335 9.58886 22.3125 9.77963 22.3125 9.97854C22.3125 10.1775 22.2335 10.3682 22.0929 10.5089L15.0928 17.5089C14.8783 17.7234 14.5558 17.7875 14.2755 17.6715C13.9952 17.5554 13.8125 17.2819 13.8125 16.9785V13.1805C8.99081 13.5129 5.04239 17.0253 4.05219 21.636C3.97796 21.9817 3.67244 22.2285 3.31891 22.2285C2.96538 22.2285 2.65986 21.9817 2.58563 21.636C2.4066 20.8024 2.3125 19.9379 2.3125 19.0523C2.3125 12.5386 7.39629 7.21238 13.8125 6.82486V2.97854C13.8125 2.67519 13.9952 2.40171 14.2755 2.28563ZM15.3125 4.7892V7.55227C15.3125 7.96649 14.9767 8.30227 14.5625 8.30227C9.00767 8.30227 4.43687 12.5155 3.87136 17.9206C5.96857 14.1816 9.96993 11.6548 14.5625 11.6548C14.9767 11.6548 15.3125 11.9906 15.3125 12.4048V15.1679L20.5019 9.97854L15.3125 4.7892Z" fill="#ffffff"/></svg></a>
-                <a class="btn" href=""><svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)"><path fill-rule="evenodd" clip-rule="evenodd" d="M2.50002 12.0957C2.50002 6.849 6.75332 2.5957 12 2.5957C17.2467 2.5957 21.5 6.849 21.5 12.0957C21.5 17.3424 17.2467 21.5957 12 21.5957H3.25002C2.94668 21.5957 2.6732 21.413 2.55711 21.1327C2.44103 20.8525 2.50519 20.5299 2.71969 20.3154L4.77303 18.262C3.35633 16.603 2.50002 14.4488 2.50002 12.0957ZM12 4.0957C7.58174 4.0957 4.00002 7.67742 4.00002 12.0957C4.00002 14.305 4.89463 16.304 6.34317 17.7526C6.48382 17.8932 6.56284 18.084 6.56284 18.2829C6.56284 18.4818 6.48382 18.6726 6.34317 18.8132L5.06068 20.0957H12C16.4183 20.0957 20 16.514 20 12.0957C20 7.67742 16.4183 4.0957 12 4.0957Z" fill="#ffffff"/></svg></a>
+                <a class=" d-flex mb-3 align-items-center author-link"
+                    href="{{url_for('topic_page',topic_name=post.post_author.nickname)}}"> <!-- Профіль -->
+                    <div class="profile-btn me-2"
+                        style="background-image: url({{url_for('static',filename='users_uploads/'+post.post_author.avatar)}});">
+                    </div>
+                    {{post.post_author.nickname}} <!-- Відображення ніку -->
+                </a>
+
+                <h5 class="card-title">{{post.title}}</h5>
+                <p class="card-text"><small class="text-body-secondary">{{post.published_at}}</small></p>
             </div>
+
+            <p class="card-text">{{post.content}}</p> <!-- | фільтр truncate обрізає текст -->
         </div>
 
-        <div class="comments">
-            <h3>Коментарі</h3>
-            <form class="py-5" method="post">
-                {{form.hidden_tag()}} <!-- Додавання CSRF токена від атак -->
-                <div>
-                    {{form.content.label}}
-                    {{form.content(class="form-control")}}
-                </div>
+        {% if post.image %}
+        <img class="post-img" src="{{ url_for('static',filename='users_uploads/'+post.image)}}" alt="...">
+        {% endif %}
 
-                <div class="mb-3">
-                    {{form.submit(class="btn btn-primary")}}
-                </div>
-            </form>
+        <div>
+            <button class="btn"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M11.8227 4.77124L12 4.94862L12.1773 4.77135C14.4244 2.52427 18.0676 2.52427 20.3147 4.77134C22.5618 7.01842 22.5618 10.6616 20.3147 12.9087L13.591 19.6324C12.7123 20.5111 11.2877 20.5111 10.409 19.6324L3.6853 12.9086C1.43823 10.6615 1.43823 7.01831 3.6853 4.77124C5.93237 2.52417 9.5756 2.52417 11.8227 4.77124ZM10.762 5.8319C9.10073 4.17062 6.40725 4.17062 4.74596 5.8319C3.08468 7.49319 3.08468 10.1867 4.74596 11.848L11.4697 18.5718C11.7625 18.8647 12.2374 18.8647 12.5303 18.5718L19.254 11.8481C20.9153 10.1868 20.9153 7.49329 19.254 5.83201C17.5927 4.17072 14.8993 4.17072 13.238 5.83201L12.5304 6.53961C12.3897 6.68026 12.199 6.75928 12 6.75928C11.8011 6.75928 11.6104 6.68026 11.4697 6.53961L10.762 5.8319Z"
+                        fill="#ffffff" />
+                </svg></button>
+            <a class="btn" href=""><svg width="32" height="32" viewBox="0 0 25 25" fill="none"
+                    xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M14.2755 2.28563C14.5558 2.16954 14.8783 2.23371 15.0928 2.44821L22.0929 9.44821C22.2335 9.58886 22.3125 9.77963 22.3125 9.97854C22.3125 10.1775 22.2335 10.3682 22.0929 10.5089L15.0928 17.5089C14.8783 17.7234 14.5558 17.7875 14.2755 17.6715C13.9952 17.5554 13.8125 17.2819 13.8125 16.9785V13.1805C8.99081 13.5129 5.04239 17.0253 4.05219 21.636C3.97796 21.9817 3.67244 22.2285 3.31891 22.2285C2.96538 22.2285 2.65986 21.9817 2.58563 21.636C2.4066 20.8024 2.3125 19.9379 2.3125 19.0523C2.3125 12.5386 7.39629 7.21238 13.8125 6.82486V2.97854C13.8125 2.67519 13.9952 2.40171 14.2755 2.28563ZM15.3125 4.7892V7.55227C15.3125 7.96649 14.9767 8.30227 14.5625 8.30227C9.00767 8.30227 4.43687 12.5155 3.87136 17.9206C5.96857 14.1816 9.96993 11.6548 14.5625 11.6548C14.9767 11.6548 15.3125 11.9906 15.3125 12.4048V15.1679L20.5019 9.97854L15.3125 4.7892Z"
+                        fill="#ffffff" />
+                </svg></a>
+            <a class="btn" href=""><svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M2.50002 12.0957C2.50002 6.849 6.75332 2.5957 12 2.5957C17.2467 2.5957 21.5 6.849 21.5 12.0957C21.5 17.3424 17.2467 21.5957 12 21.5957H3.25002C2.94668 21.5957 2.6732 21.413 2.55711 21.1327C2.44103 20.8525 2.50519 20.5299 2.71969 20.3154L4.77303 18.262C3.35633 16.603 2.50002 14.4488 2.50002 12.0957ZM12 4.0957C7.58174 4.0957 4.00002 7.67742 4.00002 12.0957C4.00002 14.305 4.89463 16.304 6.34317 17.7526C6.48382 17.8932 6.56284 18.084 6.56284 18.2829C6.56284 18.4818 6.48382 18.6726 6.34317 18.8132L5.06068 20.0957H12C16.4183 20.0957 20 16.514 20 12.0957C20 7.67742 16.4183 4.0957 12 4.0957Z"
+                        fill="#ffffff" />
+                </svg></a>
+        </div>
+    </div>
 
-            {% for comments in post.comments %}
-                <h5>{{comment.comment_author.nickname}}</h5>
-                <h5>{{comment.content}}</h5>
-            {% endfor %}
+    <div class="comments">
+        <h3>Коментарі</h3>
+        <form class="py-5" method="post">
+            {{form.hidden_tag()}} <!-- Додавання CSRF токена від атак -->
+            <div>
+                {{form.content.label}}
+                {{form.content(class="form-control")}}
+            </div>
+
+            <div class="mb-3">
+                {{form.submit(class="btn btn-primary")}}
+            </div>
+        </form>
+
+        {% for comment in post.comments %}
+
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">
+                    <a class="text-white text-decoration-none d-flex mb-3 align-items-center author-link"
+                            href="{{url_for('topic_page', topic_name = comment.comment_author.nickname)}}">
+                            <div class="profile-btn me-2"
+                                style="background-image: url({{url_for('static',filename='users_uploads/'+comment.comment_author.avatar)}})">
+                            </div>
+                            {{comment.comment_author.nickname}}
+                        </a>
+                </h6>
+                <p>{{comment.content}}</p>
+            </div>
+            <p class=""><small class="text-body-secondary">{{comment.published_at}}</small></p>
         </div>
 
+        {% endfor %}
+    </div>
 
-{% endblock  %}
+
+    {% endblock %}

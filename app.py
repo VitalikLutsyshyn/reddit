@@ -124,6 +124,8 @@ def add_post(topic_name):  # Додавання посту
         
         db.session.add(post)
         db.session.commit()
+        return redirect(url_for("topic_page",topic_name = topic_name))
+    
     return render_template("add_post.html", form=form)
 
 
@@ -143,7 +145,7 @@ def add_topic():  # Додавання нової теми
             path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
             image.save(path)
         else:
-            filename = ""
+            filename = "photo-circle.png"
 
         if form.image.data:  # Завантаження обкладинки теми
             cover = form.cover.data
@@ -162,6 +164,8 @@ def add_topic():  # Додавання нової теми
         )
         db.session.add(topic)
         db.session.commit()
+
+        return redirect(url_for("topic_page",topic_name = topic.name))
     return render_template("add_topic.html", form=form)
 
 
@@ -174,7 +178,7 @@ def topic_page(topic_name):
 #зрообити сторінку поста
 @app.route("/<topic_name>/<int:post_id>", methods = ["POST","GET"])
 def post_page(topic_name,post_id):
-    post = Post.query.get(post.id)
+    post = Post.query.get(post_id)
     form =  CommentForm()
 
     if form.validate_on_submit():
@@ -184,7 +188,6 @@ def post_page(topic_name,post_id):
                           )
         db.session.add(comment)
         db.session.commit()
-
     return render_template("post_page.html",post=post,form=form)
 
 
