@@ -1,5 +1,5 @@
 #підключення всіх функцій
-from flask import Flask, render_template, request, session, redirect, url_for, flash  # Імпорт Flask-функцій для створення веб-додатку
+from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify  # Імпорт Flask-функцій для створення веб-додатку
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required  # Імпорт функцій для авторизації
 from sqlalchemy.orm import DeclarativeBase  # Для створення базової моделі SQLAlchemy
 from config import *  # Імпорт налаштувань (наприклад, секретного ключа, URI бази тощо)
@@ -25,7 +25,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = SQLALCHEMY_TRACK_MODIFICATIONS  #
 db.init_app(app)  # Ініціалізує базу даних із додатком
 
 migrate = Migrate(app, db)  # Ініціалізує Flask-Migrate для керування міграціями
-from models import User, Topic, Post, Comment  # Імпорт моделей користувача, тем і постів
+from models import User, Topic, Post, Comment, Like  # Імпорт моделей користувача, тем і постів
 
 @login_manager.user_loader
 def load_user(user_id):  # Функція завантаження користувача за ID (використовується Flask-Login)
@@ -34,6 +34,10 @@ def load_user(user_id):  # Функція завантаження корист�
 @app.route("/")
 def index():  # Головна сторінка
     return render_template("index.html")  # Рендеринг шаблону index.html
+
+@app.route("/favicon.ico/")
+def favicon():
+    return redirect(url_for('static', filename = "favicon.ico"))
 
 @app.route("/registration", methods=["POST", "GET"])
 def user_registration():  # Сторінка реєстрації
@@ -101,7 +105,6 @@ def logout():
 
 @app.route("/<topic_name>/add_post", methods=["POST", "GET"])
 @login_required
-
 def add_post(topic_name):  # Додавання посту
     form = PostForm()
     topic = Topic.query.filter_by(name = topic_name).first()
@@ -175,20 +178,39 @@ def topic_page(topic_name):
 
     return render_template("topic_page.html",topic=topic) 
 
-#зрообити сторінку поста
+@app.route("/like/<int:post_id>")
+@login_required
+def post_like(post_id):
+    post = Post.query.get_or_404(post_id)
+    is_like = Like.query.filter_by(post_id=post_id,user_id= current_user.id).first()
+    if is_like:
+        db.session.delete(is_like)
+        db.session.commit()
+    else:
+        new_like = Like(post_id=post_id,user_id= current_user.id)
+        db.session.add(new_like)
+        db.session.commit()
+    return jsonify({"likes": len(post.likes)})
+
 @app.route("/<topic_name>/<int:post_id>", methods = ["POST","GET"])
 def post_page(topic_name,post_id):
     post = Post.query.get(post_id)
     form =  CommentForm()
 
     if form.validate_on_submit():
-        comment = Comment(post_id=post_id,
-                          user_id=current_user.id,
-                          content=form.content.data
-                          )
-        db.session.add(comment)
-        db.session.commit()
+        if current_user.is_authenticated:
+            comment = Comment(post_id=post_id,
+                            user_id=current_user.id,
+                            content=form.content.data
+                            )
+            db.session.add(comment)
+            db.session.commit()
+        else:   
+            flash("Увійдіть щоб залишити коментар","alert-warning")
+
     return render_template("post_page.html",post=post,form=form)
+
+
 
 
 if __name__ == "__main__":
