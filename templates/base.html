@@ -57,7 +57,7 @@
                 <button class="btn profile-btn dropdown-toggle" style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 </button>
                 <ul class="dropdown-menu"> <!-- Випадаюче меню -->
-                  <li><a class="dropdown-item d-flex" href="#"> <!-- Профіль -->
+                  <li><a class="dropdown-item d-flex" href="{{url_for('topic_page',topic_name=current_user.nickname)}}"> <!-- Профіль -->
                   <div class="profile-btn me-2" style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});">
 
                   </div>

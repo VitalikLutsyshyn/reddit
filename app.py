@@ -197,6 +197,13 @@ def post_page(topic_name,post_id):
     post = Post.query.get(post_id)
     form =  CommentForm()
 
+    post_liked = False
+        
+        is_like = Like.query.filter_by(post_id=post_id,user_id= current_user.id).first()
+        if is_like:
+            post_liked = True
+        
+
     if form.validate_on_submit():
         if current_user.is_authenticated:
             comment = Comment(post_id=post_id,
@@ -208,7 +215,7 @@ def post_page(topic_name,post_id):
         else:   
             flash("Увійдіть щоб залишити коментар","alert-warning")
 
-    return render_template("post_page.html",post=post,form=form)
+    return render_template("post_page.html",post=post,form=form, post_liked = post_liked)
 
 
 

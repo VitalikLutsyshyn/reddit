@@ -38,3 +38,7 @@
 
 .subscribe-btn,.add-post-btn{
 }
+
+.like-btn.liked svg{
+    fill: rgb(220, 22, 22);
+}
