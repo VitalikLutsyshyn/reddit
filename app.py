@@ -199,9 +199,9 @@ def post_page(topic_name,post_id):
 
     post_liked = False
         
-        is_like = Like.query.filter_by(post_id=post_id,user_id= current_user.id).first()
-        if is_like:
-            post_liked = True
+    is_like = Like.query.filter_by(post_id=post_id,user_id= current_user.id).first()
+    if is_like:
+        post_liked = True
         
 
     if form.validate_on_submit():
