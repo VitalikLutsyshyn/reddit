@@ -8,7 +8,7 @@ from db import db  # Імпорт об’єкта бази даних
 from werkzeug.utils import secure_filename  # Для безпечного збереження імен файлів
 from forms import RegistrationForm, LoginForm, PostForm, TopicForm, CommentForm  # Імпорт форм (реєстрації, входу, посту, топіка)
 import os  # Робота з файловою системою
-
+from datetime import datetime, timezone, timedelta
 app = Flask(__name__)  # Створення екземпляру Flask-додатку
 app.secret_key = SECRET_KEY  # Встановлення секретного ключа
 
@@ -25,16 +25,19 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = SQLALCHEMY_TRACK_MODIFICATIONS  #
 db.init_app(app)  # Ініціалізує базу даних із додатком
 
 migrate = Migrate(app, db)  # Ініціалізує Flask-Migrate для керування міграціями
-from models import User, Topic, Post, Comment, Like  # Імпорт моделей користувача, тем і постів
+from models import User, Topic, Post, Comment, Like,TopicMember  # Імпорт моделей користувача, тем і постів
 
 @login_manager.user_loader
 def load_user(user_id):  # Функція завантаження користувача за ID (використовується Flask-Login)
     return User.query.get(int(user_id))
-
+#################################################
 @app.route("/")
 def index():  # Головна сторінка
-    return render_template("index.html")  # Рендеринг шаблону index.html
+    days_ago = datetime.now(timezone.utc) - timedelta(days=14)
+    posts = Post.query.filter(Post.published_at>=days_ago).all()
+    return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
 
+############################################
 @app.route("/favicon.ico/")
 def favicon():
     return redirect(url_for('static', filename = "favicon.ico"))
@@ -175,8 +178,14 @@ def add_topic():  # Додавання нової теми
 @app.route("/<topic_name>/")#Буде підписуватися назва топіка в url адресі
 def topic_page(topic_name):
     topic = Topic.query.filter_by(name=topic_name).first()
+    subscribed = False
+    if current_user.is_authenticated:
+        is_subscribe = TopicMember.query.filter_by(id_topic=topic.id, id_user=current_user.id).first()
+        if is_subscribe:
+            subscribed = True
 
-    return render_template("topic_page.html",topic=topic) 
+
+    return render_template("topic_page.html",topic=topic, subscribed = subscribed) 
 
 @app.route("/like/<int:post_id>")
 @login_required
@@ -198,11 +207,11 @@ def post_page(topic_name,post_id):
     form =  CommentForm()
 
     post_liked = False
-        
-    is_like = Like.query.filter_by(post_id=post_id,user_id= current_user.id).first()
-    if is_like:
-        post_liked = True
-        
+    if current_user.is_authenticated:
+        is_like = Like.query.filter_by(post_id=post_id,user_id= current_user.id).first()
+        if is_like:
+            post_liked = True
+            
 
     if form.validate_on_submit():
         if current_user.is_authenticated:
@@ -218,7 +227,26 @@ def post_page(topic_name,post_id):
     return render_template("post_page.html",post=post,form=form, post_liked = post_liked)
 
 
+##################################################33
+@app.route("/subscribe/<int:topic_id>")
+@login_required
+def subscribe(topic_id):
+    topic = Topic.query.get_or_404(topic_id)
+    is_subscribe = TopicMember.query.filter_by(id_topic=topic.id, id_user=current_user.id).first()
+    if is_subscribe:
+        db.session.delete(is_subscribe)
+        db.session.commit()
+        subscribed = False
+    else:
+        new_subscibe = TopicMember(id_topic= topic.id,id_user= current_user.id)
+        db.session.add(new_subscibe)
+        db.session.commit()
+        subscribed = True
+    
 
+
+
+    return jsonify({"subscribed":subscribed})
 
 if __name__ == "__main__":
     app.run(debug=True)  # Запуск додатку в режимі розробки

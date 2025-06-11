@@ -1,94 +1,130 @@
 <!DOCTYPE html> <!-- Визначає тип документа як HTML5 -->
 <html lang="en"> <!-- Початок HTML-документа з мовою англійською -->
+
 <head>
-    <meta charset="UTF-8"> <!-- Кодування символів - UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Адаптація для мобільних пристроїв -->
-    <title>Reddit</title> <!-- Заголовок вкладки браузера -->
-    
-    <!-- Підключення Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Підключення до серверу шрифтів -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Дозвіл на зовнішні ресурси -->
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet"> <!-- Підключення шрифтів Amatic SC -->
+  <meta charset="UTF-8"> <!-- Кодування символів - UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Адаптація для мобільних пристроїв -->
+  <title>Reddit</title> <!-- Заголовок вкладки браузера -->
 
-    <!-- Повторне підключення (можна було б уникнути дубляжу) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Підключення другого набору шрифтів Spectral -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
-        rel="stylesheet">
+  <!-- Підключення Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Підключення до серверу шрифтів -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Дозвіл на зовнішні ресурси -->
+  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Підключення шрифтів Amatic SC -->
 
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Повторне підключення (можна було б уникнути дубляжу) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Підключення другого набору шрифтів Spectral -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+    rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <!-- Tabler Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css">
-    
-    <!-- Підключення власного CSS файлу зі static -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.30.0/dist/tabler-icons.min.css">
+
+  <!-- Підключення власного CSS файлу зі static -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
 </head>
 
 <body data-bs-theme="dark"> <!-- Початок тіла сайту, тема Bootstrap — темна -->
-    <header>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary"> <!-- Навігаційна панель Bootstrap -->
-            <div class="container"> <!-- Контейнер для центрованого контенту -->
-              <a class="navbar-brand" href="#"> <!-- Логотип -->
-                <img src="{{ url_for('static',filename='img/reddit-seeklogo.png')}}" height="30"  alt=""> <!-- Зображення логотипу -->
-                REDDIT</a> <!-- Назва бренду -->
-              
-              <div class="collapse navbar-collapse"  id="navbarSupportedContent"> <!-- Меню, що розгортається -->
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0"> <!-- Список навігації -->
-                <form class="d-flex" role="search"> <!-- Форма пошуку -->
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> <!-- Поле вводу -->
-                  <button class="btn btn-outline-secondary" type="submit"><i class="ti ti-search"></i></button> <!-- Кнопка пошуку -->
-                </form>
-              </div>
-            </ul>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary"> <!-- Навігаційна панель Bootstrap -->
+      <div class="container"> <!-- Контейнер для центрованого контенту -->
+        <a class="navbar-brand" href="#"> <!-- Логотип -->
+          <img src="{{ url_for('static',filename='img/reddit-seeklogo.png')}}" height="30" alt="">
+          <!-- Зображення логотипу -->
+          REDDIT</a> <!-- Назва бренду -->
 
-            {% if current_user.is_authenticated %} <!-- Перевірка: чи користувач авторизований -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent"> <!-- Меню, що розгортається -->
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0"> <!-- Список навігації -->
+            <form class="d-flex" role="search"> <!-- Форма пошуку -->
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <!-- Поле вводу -->
+              <button class="btn btn-outline-secondary" type="submit"><i class="ti ti-search"></i></button>
+              <!-- Кнопка пошуку -->
+            </form>
+        </div>
+        </ul>
 
-              <a class="btn create-btn" href="{{ url_for('add_post',topic_name = current_user.user_topics[0].name)}}"><i class="ti ti-plus"></i>Створити</a> <!-- Кнопка створення посту -->
+        {% if current_user.is_authenticated %} <!-- Перевірка: чи користувач авторизований -->
 
-              <div class="btn-group dropstart"> <!-- Дропдаун меню профілю -->
-                <button class="btn profile-btn dropdown-toggle" style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                </button>
-                <ul class="dropdown-menu"> <!-- Випадаюче меню -->
-                  <li><a class="dropdown-item d-flex" href="{{url_for('topic_page',topic_name=current_user.nickname)}}"> <!-- Профіль -->
-                  <div class="profile-btn me-2" style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});">
+        <a class="btn create-btn" href="{{ url_for('add_post',topic_name = current_user.user_topics[0].name)}}"><i
+            class="ti ti-plus"></i>Створити</a> <!-- Кнопка створення посту -->
 
-                  </div>
-                    {{current_user.nickname}} <!-- Відображення ніку -->
-                  </a></li>
-                  <li><a class="dropdown-item" href="{{url_for('add_post',topic_name = current_user.user_topics[0].name)}}">Створити пост</a></li> <!-- Створити пост --> 
-                  <li><a class="dropdown-item" href="{{url_for('add_topic')}}">Створити топік </a></li> <!-- Створити топік -->
-                  <li><hr class="dropdown-divider"></li> <!--Лінія між рядками -->
-                  <li><a class="dropdown-item" href="{{url_for('logout')}}">Вийти</a></li> <!-- Вийти -->
-                </ul>
-              </div>
-              
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <!-- Кнопка для мобільного меню -->
-                <span class="navbar-toggler-icon"></span>
-            {% else %} <!-- Якщо користувач не авторизований -->
-              <a class="btn" href="{{ url_for('login')}}">Увійти</a> <!-- Кнопка входу -->
-              <a class="btn" href="{{ url_for('user_registration')}}">Реєстрація</a> <!-- Кнопка реєстрації -->
-            {% endif %}
-              </button>
-            </div>
-          </nav>
-    </header>
+        <div class="btn-group dropstart"> <!-- Дропдаун меню профілю -->
+          <button class="btn profile-btn dropdown-toggle"
+            style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});"
+            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          </button>
+          <ul class="dropdown-menu"> <!-- Випадаюче меню -->
+            <li><a class="dropdown-item d-flex" href="{{url_for('topic_page',topic_name=current_user.nickname)}}">
+                <!-- Профіль -->
+                <div class="profile-btn me-2"
+                  style="background-image: url({{url_for('static',filename='users_uploads/'+current_user.avatar)}});">
 
-    <main class="container">
-      <div class="row">
-        <div class="col-0 col-lg-2"></div>
+                </div>
+                {{current_user.nickname}} <!-- Відображення ніку -->
+              </a></li>
+            <li><a class="dropdown-item"
+                href="{{url_for('add_post',topic_name = current_user.user_topics[0].name)}}">Створити пост</a></li>
+            <!-- Створити пост -->
+            <li><a class="dropdown-item" href="{{url_for('add_topic')}}">Створити топік </a></li>
+            <!-- Створити топік -->
+            <li>
+              <hr class="dropdown-divider">
+            </li> <!--Лінія між рядками -->
+            <li><a class="dropdown-item" href="{{url_for('logout')}}">Вийти</a></li> <!-- Вийти -->
+          </ul>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <!-- Кнопка для мобільного меню -->
+          <span class="navbar-toggler-icon"></span>
+          {% else %} <!-- Якщо користувач не авторизований -->
+          <a class="btn" href="{{ url_for('login')}}">Увійти</a> <!-- Кнопка входу -->
+          <a class="btn" href="{{ url_for('user_registration')}}">Реєстрація</a> <!-- Кнопка реєстрації -->
+          {% endif %}
+        </button>
+      </div>
+    </nav>
+  </header>
+
+
+
+
+  <main class="container">
+    <div class="row">
+      <div class="col-0 col-lg-2">
+        <div class="list-group py-3">
+          <a href="{{url_for('index')}}" class="list-group-item list-group-item-action">Home</a>
+          <a href="" class="list-group-item list-group-item-action">Popular</a>
+          <a href="#" class="list-group-item list-group-item-action">Answers</a>
+          <a href="#" class="list-group-item list-group-item-action">Explore</a>
+          <a href="#" class="list-group-item list-group-item-action">All</a>
+        </div>
+
+        <h6>Мої підписки</h6>
+        {% if current_user.is_authenticated %} <!-- Перевірка: чи користувач авторизований -->
+        <div class="list-group">
+          {% for topic_member in current_user.subscriptions %}
+          <a href="{{url_for('topic_page',topic_name = topic_member.topic.name)}}" class="list-group-item list-group-item-action">{{topic_member.topic.name}}</a>
+          {% endfor %}
+          </div>
+          {% endif %}
+        </div>
 
         <div class="col-12 col-lg-8">
-          {% block content  %} <!-- Місце для динамічного контенту -->
-          {% endblock  %}
+          {% block content %} <!-- Місце для динамічного контенту -->
+          {% endblock %}
         </div>
 
         <div class="col-0 col-lg-2"></div>
@@ -97,9 +133,9 @@
 
 
 
-    </main>
+  </main>
 
-<!-- 
+  <!-- 
     <footer>
         <div class="footer-bottom">
             <p>&copy; 2024 Ваш Інтернет Магазин. Усі права захищені.</p>
@@ -108,9 +144,10 @@
     </footer> 
 -->
 
-    <!-- Підключення Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+  <!-- Підключення Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

@@ -35,7 +35,7 @@ class Topic(db.Model):
     image = db.Column(db.Text,default="photo-circle.png")
     cover = db.Column(db.Text)#Обкладинка
     posts = db.relationship("Post", backref="topic", lazy=True)#Робимо звязок один до багатьох
-     
+    
 
 class TopicMember(db.Model):
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)#id підписки
@@ -56,7 +56,7 @@ class Post(db.Model):
     published_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone.utc))
     likes = db.relationship("Like",backref="liked_post",lazy=True)
     comments=db.relationship("Comment", backref="post",lazy=True)
-    
+    # topic = db.relationship("Topic",backref="posts",lazy=True)
 
 class Comment(db.Model):
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)

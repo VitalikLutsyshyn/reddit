@@ -1,19 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     
-<div class="list-group">
-  <a href="{{url_for('index')}}" class="list-group-item list-group-item-action">Home</a>
-  <a href="" class="list-group-item list-group-item-action">Popular</a>
-  <a href="#" class="list-group-item list-group-item-action">Answers</a>
-  <a href="#" class="list-group-item list-group-item-action">Explore</a>
-  <a href="#" class="list-group-item list-group-item-action">All</a>
-
-</div>
+{% for post in posts %}
+    {% include 'post_cart.html' %}
+{% endfor %}
 
 
-
-
-<div class="list-group">
-
-</div>
 {% endblock  %}
