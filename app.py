@@ -34,16 +34,16 @@ def load_user(user_id):  # Функція завантаження корист�
 
 @app.route("/")
 def index():  # Головна сторінка
-    days_ago = datetime.now(timezone.utc) - timedelta(days=70)
-    posts = db.post.query.all()
-    posts = sorted(posts, key= lambda post:len(post.likes))
+    days_ago = datetime.now(timezone.utc) - timedelta(days=14)
+    posts = Post.query.filter(Post.published_at>=days_ago).all()
     return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
 
 
 ############################################
 @app.route("/popular")
 def popular():  # Головна сторінка
-    posts = Post.query.auterjoin(Post.likes).group_by(Post.id).order_by(func.count(Like.id)).all()
+    posts = Post.query.all()
+    posts = sorted(posts, key= lambda post:len(post.likes))
     return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
 #################################################
 
