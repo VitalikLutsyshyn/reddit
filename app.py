@@ -32,11 +32,17 @@ from models import User, Topic, Post, Comment, Like,TopicMember  # Імпорт 
 def load_user(user_id):  # Функція завантаження користувача за ID (використовується Flask-Login)
     return User.query.get(int(user_id))
 
+@app.route("/favicon.ico/")
+def favicon():
+    return redirect(url_for('static', filename = "favicon.ico"))
+
 @app.route("/")
 def index():  # Головна сторінка
-    days_ago = datetime.now(timezone.utc) - timedelta(days=14)
+    days_ago = datetime.now(timezone.utc) - timedelta(days=70)
     posts = Post.query.filter(Post.published_at>=days_ago).all()
     return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
+
+
 
 
 ############################################
@@ -46,11 +52,6 @@ def popular():  # Головна сторінка
     posts = sorted(posts, key= lambda post:len(post.likes))
     return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
 #################################################
-
-
-@app.route("/favicon.ico/")
-def favicon():
-    return redirect(url_for('static', filename = "favicon.ico"))
 
 @app.route("/registration", methods=["POST", "GET"])
 def user_registration():  # Сторінка реєстрації
