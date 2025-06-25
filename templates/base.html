@@ -112,8 +112,9 @@
           <a href="#" class="list-group-item list-group-item-action">All</a>
         </div>
 
-        <h6>Мої підписки</h6>
+        
         {% if current_user.is_authenticated %} <!-- Перевірка: чи користувач авторизований -->
+        <h6>Мої підписки</h6>
         <div class="list-group">
           {% for topic_member in current_user.subscriptions %}
           <a href="{{url_for('topic_page',topic_name = topic_member.topic.name)}}" class="list-group-item list-group-item-action">{{topic_member.topic.name}}</a>
