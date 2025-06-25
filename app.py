@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify  # Імпорт Flask-функцій для створення веб-додатку
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required  # Імпорт функцій для авторизації
 from sqlalchemy.orm import DeclarativeBase  # Для створення базової моделі SQLAlchemy
+from sqlalchemy import func
 from config import *  # Імпорт налаштувань (наприклад, секретного ключа, URI бази тощо)
 from flask_migrate import Migrate  # Для керування міграціями бази даних
 from db import db  # Імпорт об’єкта бази даних
@@ -30,14 +31,23 @@ from models import User, Topic, Post, Comment, Like,TopicMember  # Імпорт 
 @login_manager.user_loader
 def load_user(user_id):  # Функція завантаження користувача за ID (використовується Flask-Login)
     return User.query.get(int(user_id))
-#################################################
+
 @app.route("/")
 def index():  # Головна сторінка
-    days_ago = datetime.now(timezone.utc) - timedelta(days=14)
-    posts = Post.query.filter(Post.published_at>=days_ago).all()
+    days_ago = datetime.now(timezone.utc) - timedelta(days=70)
+    posts = db.post.query.all()
+    posts = sorted(posts, key= lambda post:len(post.likes))
     return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
 
+
 ############################################
+@app.route("/popular")
+def popular():  # Головна сторінка
+    posts = Post.query.auterjoin(Post.likes).group_by(Post.id).order_by(func.count(Like.id)).all()
+    return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
+#################################################
+
+
 @app.route("/favicon.ico/")
 def favicon():
     return redirect(url_for('static', filename = "favicon.ico"))
