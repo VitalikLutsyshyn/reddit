@@ -38,20 +38,33 @@ def favicon():
 
 @app.route("/")
 def index():  # Головна сторінка
-    days_ago = datetime.now(timezone.utc) - timedelta(days=70)
-    posts = Post.query.filter(Post.published_at>=days_ago).all()
-    return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
+    if current_user.is_authenticated:
+        days_ago = datetime.now(timezone.utc) - timedelta(days=70)
+        subscriptions = [tm.id_topic for tm in current_user.subscriptions]
+        posts = Post.query.filter(Post.topic_id.in_(subscriptions),
+                                  Post.published_at>=days_ago).order_by(Post.published_at.desc()).all()
+        return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
+    else:
+        return redirect(url_for('popular')) 
 
 
 
 
 ############################################
-@app.route("/popular")
+@app.route("/popular/")
 def popular():  # Головна сторінка
     posts = Post.query.all()
-    posts = sorted(posts, key= lambda post:len(post.likes))
+    posts = sorted(posts, key= lambda post:len(post.likes), reverse=True)#Сортує пости по лайках
     return render_template("index.html",posts = posts)  # Рендеринг шаблону index.html
 #################################################
+
+
+@app.route("/search")
+def search_page():
+    search = request.args.get("search", "")
+    posts = Post.query.filter((Post.title.ilike(f"%{search}%")) | ((Post.content.ilike(f"%{search}%"))
+                              )).order_by(Post.published_at.desc()).all()
+    return render_template("search_page.html",posts= posts)
 
 @app.route("/registration", methods=["POST", "GET"])
 def user_registration():  # Сторінка реєстрації
@@ -146,7 +159,7 @@ def add_post(topic_name):  # Додавання посту
     return render_template("add_post.html", form=form)
 
 
-@app.route("/add_topic", methods=["POST", "GET"])
+@app.route("/topic/add_topic", methods=["POST", "GET"])
 @login_required
 def add_topic():  # Додавання нової теми
     form = TopicForm()
@@ -164,7 +177,7 @@ def add_topic():  # Додавання нової теми
         else:
             filename = "photo-circle.png"
 
-        if form.image.data:  # Завантаження обкладинки теми
+        if form.cover.data:  # Завантаження обкладинки теми
             cover = form.cover.data
             cover_filename = secure_filename(cover.filename)
             path = os.path.join(app.config["UPLOAD_FOLDER"], cover_filename)
@@ -186,7 +199,7 @@ def add_topic():  # Додавання нової теми
     return render_template("add_topic.html", form=form)
 
 
-@app.route("/<topic_name>/")#Буде підписуватися назва топіка в url адресі
+@app.route("/topic/<topic_name>/")#Буде підписуватися назва топіка в url адресі
 def topic_page(topic_name):
     topic = Topic.query.filter_by(name=topic_name).first()
     subscribed = False

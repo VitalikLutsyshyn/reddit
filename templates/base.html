@@ -45,8 +45,8 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent"> <!-- Меню, що розгортається -->
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0"> <!-- Список навігації -->
-            <form class="d-flex" role="search"> <!-- Форма пошуку -->
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" role="search" method="GET" action="{{url_for('search_page')}}"> <!-- Форма пошуку -->
+              <input required name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
               <!-- Поле вводу -->
               <button class="btn btn-outline-secondary" type="submit"><i class="ti ti-search"></i></button>
               <!-- Кнопка пошуку -->
@@ -106,7 +106,7 @@
       <div class="col-0 col-lg-2">
         <div class="list-group py-3">
           <a href="{{url_for('index')}}" class="list-group-item list-group-item-action">Home</a>
-          <a href="" class="list-group-item list-group-item-action">Popular</a>
+          <a href="{{url_for('popular')}}" class="list-group-item list-group-item-action">Popular</a>
           <a href="#" class="list-group-item list-group-item-action">Answers</a>
           <a href="#" class="list-group-item list-group-item-action">Explore</a>
           <a href="#" class="list-group-item list-group-item-action">All</a>
