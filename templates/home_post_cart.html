@@ -3,11 +3,11 @@
             <div class="card-body">
                 <div>
                     <a class=" d-flex mb-3 align-items-center author-link"
-                        href="{{url_for('topic_page',topic_name=post.topic.title)}}"> <!-- Профіль -->
+                        href="{{url_for('topic_page',topic_name=post.topic.name)}}"> <!-- Профіль -->
                         <div class="profile-btn me-2"
                             style="background-image: url({{url_for('static',filename='users_uploads/'+post.topic.image)}});">
                         </div>
-                        {{post.topic.title}} <!-- Відображення ніку -->
+                        {{post.topic.name}} <!-- Відображення ніку -->
                     </a>
 
                     <h5 class="card-title">{{post.title}}</h5>

@@ -199,6 +199,47 @@ def add_topic():  # Додавання нової теми
     return render_template("add_topic.html", form=form)
 
 
+
+@app.route("/topic/<topic_name>/edit", methods=["POST", "GET"])
+@login_required
+def edit_topic_page(topic_name):
+    topic = Topic.query.filter_by(name=topic_name).first()
+    form = TopicForm(obj=topic)
+
+    if form.validate_on_submit():
+        is_topic = Topic.query.filter_by(name=form.name.data).first()  # Перевірка чи тема існує
+        if is_topic and is_topic != topic:
+            flash("Такий топік вже існує", "alert-warning")
+            return redirect(url_for("add_topic"))
+        else:
+            if current_user.nickname == topic.name:
+                current_user.nickname = form.name.data
+            topic.name = form.name.data
+        topic.rules = form.rules.data
+
+        if form.image.data:  # Завантаження картинки теми
+            image = form.image.data
+            filename = secure_filename(image.filename)
+            path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            image.save(path)
+            topic.image = filename
+        if form.cover.data:  # Завантаження обкладинки теми
+            cover = form.cover.data
+            cover_filename = secure_filename(cover.filename)
+            path = os.path.join(app.config["UPLOAD_FOLDER"], cover_filename)
+            cover.save(path)
+            topic.cover = cover_filename
+
+        db.session.commit()
+
+        flash("Редагування успішне!","alert-success")
+
+    return render_template("edit_topic.html",topic=topic, form = form) 
+
+
+
+
+
 @app.route("/topic/<topic_name>/")#Буде підписуватися назва топіка в url адресі
 def topic_page(topic_name):
     topic = Topic.query.filter_by(name=topic_name).first()

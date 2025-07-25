@@ -16,7 +16,7 @@
             <h1>{{topic.name}}</h1>
         </div>
 
-        <div class="col-4 col-md-5 topic-btn ">
+        <div class="col-4 col-md-5 topic-btn">
             {% if subscribed %}
             <button class="btn btn-outline-success subscribe-btn ">Відписатися</button>
             {% else %}
@@ -26,6 +26,12 @@
 
             <a href="{{url_for('add_post',topic_name = topic.name)}}"
                 class=" btn-outline-info btn t add-post-btn">Додати пост</a>
+
+                {% if current_user.id == topic.author_id %}     
+                    <a href="{{url_for('edit_topic_page',topic_name = topic.name)}}"
+                        class=" btn-outline-info btn t add-post-btn"><i class="ti ti-pencil"></i></a>
+                {% endif %}
+
         </div>
     </div>
 
